@@ -14,6 +14,23 @@ public class UsuarioService
     
     public Usuario cadastrar(Usuario usuario)
     {
+        if(usuario.getNome() == null || usuario.getNome().isBlank())
+        {
+            throw new IllegalArgumentException("O nome é obrigatório.");
+        }
+        if(usuario.getEmail() == null || usuario.getEmail().isBlank())
+        {
+            throw new IllegalArgumentException("O email é obrigatório.");
+        }
+        
+        for(Usuario usuarioExiste : usuarios)
+        {
+            if(usuarioExiste.getEmail().equalsIgnoreCase(usuario.getEmail()))
+            {
+                throw new IllegalArgumentException("O email já está cadastrado.");
+            }
+        }
+        
         usuario.setId(proximoId);
         proximoId++;
         
