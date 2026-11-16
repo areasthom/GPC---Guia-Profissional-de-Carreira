@@ -12,9 +12,13 @@ body{
 
 .conteudo1{
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
     background-color: rgb(26, 46, 58);
     padding: 20px 120px;
+}
+
+.conteudo1 img{
+    width: 120px;
 }
 
 .hero1{
@@ -72,6 +76,10 @@ body{
     cursor: pointer;
 }
 
+.btn-voltarInicio:hover{
+    text-decoration: underline;
+}
+
 .hero2 h2{
     font-size: 30px;
     margin-top: 50px;
@@ -116,9 +124,17 @@ body{
     border: none;
 }
 
+.btn-criarConta:hover{
+    background-color: #01655C;
+}
+
 .btn-entrar{
     margin-top: 20px;
     text-align: center;
+}
+
+.btn-entrar a:hover{
+    text-decoration: underline;
 }
 
 .btn-entrar p{
@@ -177,4 +193,12 @@ body{
     .hero2 h2{
         margin-top: 30px;
     }
+}
+/* mensagem de erro do formulário */
+.hero2 .area-login .erro-form,
+.hero2 .area-cadastro .erro-form{
+    color: #b3261e;
+    font-size: 13px;
+    line-height: 1.4;
+    margin-top: 14px;
 }

@@ -17,6 +17,10 @@ body{
     max-width: 100%;
 }
 
+.cabecalho img{
+    width: 120px;
+}
+
 nav{
     display: flex;
     align-items: center;
@@ -40,6 +44,10 @@ nav a{
     padding: 8px 18px;
     color: white;
     border-radius: 10px;
+}
+
+.btn-entrar:hover{
+    background-color: #01655C
 }
 
 .conteudo1{
@@ -83,7 +91,11 @@ nav a{
 
 .explorar-trilhas{
     text-decoration: none;
-    color: #017b70;
+    color: #666666;
+}
+
+.explorar-trilhas:hover{
+    color: #01655C
 }
 
 .btn-criarConta{
@@ -92,6 +104,8 @@ nav a{
     color: white;
     border-radius: 10px;
     text-decoration: none;
+}.btn-criarConta:hover{
+    background-color: #01655C;
 }
 
 .hero2{
@@ -280,5 +294,39 @@ footer{
 
     footer{
         padding: 20px;
+    }
+}
+/* ---------- ligação com a conta (links extras no menu e progresso real) ---------- */
+.nav-extra{
+    color: #666666;
+}
+
+.nav-extra:hover{
+    color: #017b70;
+}
+
+.barra-progresso{
+    overflow: hidden;
+}
+
+.barra-progresso div{
+    height: 100%;
+    width: 0;
+    background: #6ed3d9;
+    border-radius: 10px;
+    transition: width .4s ease;
+}
+
+@media(max-width: 768px){
+    nav{
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .barra-progresso div{
+        transition: none;
     }
 }
