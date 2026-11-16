@@ -31,7 +31,7 @@ formLogin.addEventListener("submit", async (event) => {
             return await resposta.json();
         }, {
             texto: "Entrando...",
-            imagem: "midia/arvore-gpc.png" // caminho da imagem da árvore
+            imagem: "midia/GPClogo.png" // caminho da imagem da árvore
         });
 
         localStorage.setItem("usuario", JSON.stringify(usuario));
