@@ -1,49 +1,51 @@
-const formLogin = document.getElementById("formLogin");
+// Login: autentica pela API Spring e leva o usuário ao destino certo.
+(function () {
+    const form = document.getElementById('formLogin');
+    const erro = document.getElementById('erroLogin');
+    const botao = form.querySelector('.btn-entrar');
+    const params = new URLSearchParams(location.search);
 
-// Erro de login "esperado" (senha errada etc.), diferente de falha de conexão
-class ErroLogin extends Error {}
+    // só aceita voltar para páginas do próprio site (ex.: "trilha.html?id=backend")
+    const proxima = (params.get('next') || '').match(/^[\w-]+\.html(\?[\w=&%.-]*)?$/) ? params.get('next') : null;
+    const destinoPadrao = (u) => (GPC.temPapel(u, 'ADMINISTRADOR') ? 'admin-pedidos.html' : 'index.html');
 
-formLogin.addEventListener("submit", async (event) => {
-    event.preventDefault();
+    // quem já está logado não precisa ver o login
+    const jaLogado = GPC.usuarioAtual();
+    if (jaLogado) { location.replace(proxima || destinoPadrao(jaLogado)); return; }
 
-    const email = document.getElementById("email").value.trim();
-    const senha = document.getElementById("senha").value;
-    const botao = formLogin.querySelector(".btn-entrar");
+    // mantém o "voltar para" ao ir criar a conta
+    if (proxima) document.getElementById('linkCadastro').href = 'cadastro.html?next=' + encodeURIComponent(proxima);
 
-    botao.disabled = true; // evita clicar duas vezes enquanto carrega
-
-    try {
-        // A animação do GPC aparece por cima do login enquanto o servidor responde
-        const usuario = await GPCLoader.durante(async () => {
-            const resposta = await fetch(`${API_URL}/api/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, senha })
-            });
-
-            if (!resposta.ok) {
-                const erro = await resposta.text();
-                throw new ErroLogin(erro || "Email ou senha inválidos.");
-            }
-
-            return await resposta.json();
-        }, {
-            texto: "Entrando...",
-            imagem: "midia/GPClogo.png" // caminho da imagem da árvore
-        });
-
-        localStorage.setItem("usuario", JSON.stringify(usuario));
-        window.location.href = "index.html";
-    } catch (erro) {
-        // o loading já sumiu sozinho; agora mostramos o erro
-        botao.disabled = false;
-        if (erro instanceof ErroLogin) {
-            alert(erro.message);
-        } else {
-            console.error("Erro ao entrar:", erro);
-            alert("Não foi possível conectar ao servidor.");
-        }
+    function mostrarErro(texto) {
+        erro.textContent = texto;
+        erro.hidden = false;
     }
-});
+
+    document.getElementById('esqueciSenha').addEventListener('click', (e) => {
+        e.preventDefault();
+        GPCUI.toast('Esta versão funciona só no navegador e não envia e-mails. Peça a um administrador para excluir a conta antiga e crie uma nova.', 'erro');
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        erro.hidden = true;
+
+        const email = document.getElementById('email').value.trim();
+        const senha = document.getElementById('senha').value;
+        if (!email || !senha) { mostrarErro('Informe o e-mail e a senha.'); return; }
+
+        botao.disabled = true; // evita clicar duas vezes durante a animação
+        let usuario;
+        try {
+            usuario = await GPC.entrar(email, senha);
+        } catch (err) {
+            botao.disabled = false;
+            mostrarErro(GPCUI.mensagemDeErro(err));
+            return;
+        }
+
+        // login correto: a árvore do GPC cresce por cima da tela antes de entrar
+        await GPCLoader.durante(async () => {}, { texto: 'Entrando...', imagem: 'midia/GPClogo.png' });
+        location.href = proxima || destinoPadrao(usuario);
+    });
+})();

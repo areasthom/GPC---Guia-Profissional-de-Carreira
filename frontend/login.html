@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="login.css">
         <link rel="shortcut icon" href="midia/GPCfavicon.png" type="image/x-icon">
-        <title>Login</title>
+        <title>Login · GPC</title>
     </head>
     <body>
         <section class="conteudo1">
@@ -24,7 +24,7 @@
     </section>
     <section class="conteudo2">
         <div class="hero2">
-            <form id="formLogin">
+            <form id="formLogin" novalidate>
                 <div class="cabecalho">
                     <a href="index.html" class="btn-voltarInicio">← Voltar ao início</a>
                 </div>
@@ -32,22 +32,26 @@
                     <h2>Que bom ter você de volta.</h2>
                     <p>Entre para continuar sua jornada.</p>
                     <label for="email">E-mail</label>
-                    <input type="email" id="email" placeholder="voce@gmail.com" required>
-                    
+                    <input type="email" id="email" placeholder="voce@gmail.com" autocomplete="username" required>
+
                     <label for="senha">Senha</label>
-                    <input type="password" id="senha" placeholder="Digite sua senha" required>
-                    
-                    <a href="#" class="esqueciSenha">Esqueci minha senha</a>
+                    <input type="password" id="senha" placeholder="Digite sua senha" autocomplete="current-password" required>
+
+                    <a href="#" class="esqueciSenha" id="esqueciSenha">Esqueci minha senha</a>
+                    <p class="erro-form" id="erroLogin" role="alert" hidden></p>
                     <button type="submit" class="btn-entrar">Entrar</button>
                     <div class="btn-criarConta">
-                        <p>Ainda não tem uma conta? <a href="cadastro.html">Criar conta</a></p>
+                        <p>Ainda não tem uma conta? <a href="cadastro.html" id="linkCadastro">Criar conta</a></p>
                     </div>
                 </div>
             </form>
         </div>
     </section>
+    <script src="dados.js"></script>
     <script src="api.js"></script>
+    <script src="store.js"></script>
+    <script src="ui.js"></script>
     <script src="gpc-loader.js"></script>
-<script src="login.js"></script>
+    <script src="login.js"></script>
 </body>
 </html>
