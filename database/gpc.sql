@@ -379,6 +379,27 @@ INSERT INTO `usuarios` VALUES (1,'Admin','admin@gpc.edu.br','$2a$10$hashSimulado
 UNLOCK TABLES;
 
 --
+-- Table structure for table `recuperacao_senha`
+--
+
+DROP TABLE IF EXISTS `recuperacao_senha`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `recuperacao_senha` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `usuario_id` bigint NOT NULL,
+  `token_hash` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expira_em` datetime NOT NULL,
+  `usado_em` datetime DEFAULT NULL,
+  `criado_em` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_recuperacao_token_hash` (`token_hash`),
+  KEY `idx_recuperacao_usuario` (`usuario_id`),
+  CONSTRAINT `recuperacao_senha_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `verificacoes_profissionais`
 --
 
