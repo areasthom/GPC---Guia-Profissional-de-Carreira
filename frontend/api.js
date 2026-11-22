@@ -37,6 +37,10 @@
     async cadastrar(dados) { return saveSession(adaptUser(await request('/api/usuarios', json('POST', dados)))); },
     async entrar(email, senha) { return saveSession(adaptUser(await request('/api/auth/login', json('POST', { email, senha })))); },
     sair() { localStorage.removeItem(SESSION_KEY); },
+    // Recuperação de senha
+    async esqueciSenha(email) { return request('/api/auth/esqueci-senha', json('POST', { email })); },
+    async validarTokenSenha(token) { return request(`/api/auth/redefinir-senha/validar?token=${encodeURIComponent(token)}`); },
+    async redefinirSenha(token, novaSenha) { return request('/api/auth/redefinir-senha', json('POST', { token, novaSenha })); },
     async atualizarConta(id, dados) { const u = adaptUser(await request(`/api/usuarios/${id}`, json('PUT', dados))); saveSession(u); return u; },
     async listarUsuarios() { return (await request('/api/usuarios')).map(adaptUser); },
     async excluirUsuario(id) { await request(`/api/usuarios/${id}`, { method: 'DELETE' }); if (Number(session()?.id) === Number(id)) api.sair(); },
